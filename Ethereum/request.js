@@ -1,4 +1,4 @@
-var server = "http://localhost:3004"
+var server = "https://evening-lake-24705.herokuapp.com"
 
 async function testRequest(from, to) {
 
