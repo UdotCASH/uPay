@@ -21,6 +21,7 @@ const price = ethers.utils.parseEther("0.1")
 
 let addresses = new Array();
 let activeAddresses = new Array();
+let y = 0
 
 let provider
 
@@ -224,25 +225,19 @@ server.listen(process.env.PORT || port, (err) => {
 async function getPaymentAddress() {
   let address
   let balance
-  let n = 0
+
+
+
   do{
-    address = addresses[n]
+    address = addresses[y]
     balance = await provider.getBalance(address)
-    n++
-  } while(balance.gt(0)||isActiveAddress(address))
+    y++
+  } while(balance.gt(0))
+  console.log(address)
   activeAddresses.push(address)
   return(address)
 }
 
-function isActiveAddress(address){
-
-  for(n = 0; n<activeAddresses.length;n++){
-    if(activeAddresses[n]==address){
-      return true
-    }
-  }
-  return false
-}
 
 
 async function listen(){
