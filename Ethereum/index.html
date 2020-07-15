@@ -9,7 +9,12 @@
   <script src="index.js"></script>
   <script src="request.js"></script>
     <label>Item: T-Shirt</label><br>
-    <label>Price: 0.1 ETH</label><br><br>
+    <label>Pay With: </label>
+    <select id="currencySelect" onchange = "updatePrice()" >
+      <option value="1">ETH</option>
+      <option value="2">uCAD</option>
+    </select><br> <br>
+    <label id="priceLabel">Price: 0.1 ETH</label><br><br>
     <button onclick="generatePayment()">Buy</button><br><br>
     <label id="addressLabel"></label><br>
     <img src= "" id="paymentQR"></img><br>
@@ -17,8 +22,6 @@
 
     <label id="time"></label>
     <script>initialize()</script>
-    <script>provider.on("0x71CB05EE1b1F506fF321Da3dac38f25c0c9ce6E1", function(newBalance) {
-        console.log(newBalance);
-    });</script>
+
   </body>
 </html>
