@@ -18,6 +18,7 @@ const fs = require('fs');
 const http = require('http')
 const port = 3004
 const price = ethers.utils.parseEther("0.1")
+const uCADprice = ethers.utils.parseUnits("20",8)
 
 let addresses = new Array();
 let activeAddresses = new Array();
@@ -342,12 +343,14 @@ let uCADABI = [
 ]
 let uCAD
 
+let n
+
 initialize()
 async function initialize(){
 
   provider = ethers.getDefaultProvider("ropsten");
   uCAD = new ethers.Contract(uCADAddress,uCADABI,provider)
-
+	n = 0
 
 }
 
@@ -545,21 +548,24 @@ async function getPaymentAddress() {
   let balance
   let uCADbalance
 
-  let n = 0
+
   do{
     address = addresses[n]
     balance = await provider.getBalance(address)
     uCADbalance = await uCAD.balanceOf(address)
     n++
-  } while(balance.gt(0)||uCADbalance.gt(0)||isActiveAddress(address))
+
+
+  } while(balance.gt(0)||uCADbalance.gt(0))
+
   activeAddresses.push(address)
   return(address)
 }
 
 function isActiveAddress(address){
 
-  for(n = 0; n<activeAddresses.length;n++){
-    if(activeAddresses[n]==address){
+  for(m = 0; m<activeAddresses.length;m++){
+    if(activeAddresses[m]==address){
       return true
     }
   }
@@ -570,21 +576,21 @@ function isActiveAddress(address){
 async function listen(){
   console.log("Listening")
 
-  for(n = 0; n<activeAddresses.length;n++){
-    let address = activeAddresses[n]
+  for(y = 0; y<activeAddresses.length;y++){
+    let address = activeAddresses[y]
     let balance = await provider.getBalance(address)
     let uCADbalance = await uCAD.balanceOf(address)
     if(balance.gte(price)){
-      processPayment(n)
+      processPayment(y)
     } else if(uCADbalance.gte(uCADprice)){
-      processPayment(n)
+      processPayment(y)
     }
   }
 
 }
 
-function processPayment(n){
-  activeAddresses.splice(n,1)
-  console.log("activeAddresses")
+function processPayment(j){
+  activeAddresses.splice(j,1)
+  console.log("activeAddresses:")
   console.log(activeAddresses)
 }
