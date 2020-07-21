@@ -543,12 +543,15 @@ server.listen(process.env.PORT || port, (err) => {
 async function getPaymentAddress() {
   let address
   let balance
+  let uCADbalance
+
   let n = 0
   do{
     address = addresses[n]
     balance = await provider.getBalance(address)
+    uCADbalance = await uCAD.balanceOf(address)
     n++
-  } while(balance.gt(0)||isActiveAddress(address))
+  } while(balance.gt(0)||uCADbalance.gt(0)||isActiveAddress(address))
   activeAddresses.push(address)
   return(address)
 }
@@ -570,7 +573,7 @@ async function listen(){
   for(n = 0; n<activeAddresses.length;n++){
     let address = activeAddresses[n]
     let balance = await provider.getBalance(address)
-    let uCADbalance = await uCAD.balanceOf(signer._address)
+    let uCADbalance = await uCAD.balanceOf(address)
     if(balance.gte(price)){
       processPayment(n)
     } else if(uCADbalance.gte(uCADprice)){

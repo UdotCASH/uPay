@@ -375,7 +375,8 @@ var fxn = async function() {
   }
 
   let balance = await provider.getBalance(activePaymentAddress)
-  let uCADbalance = await uCAD.balanceOf(signer._address)
+  let uCADbalance = await uCAD.balanceOf(activePaymentAddress)
+	console.log(uCADbalance)
   if(timeLeft>=0){
     timeLeftText = mins + ":" + seconds;
   } else {
